@@ -1,19 +1,16 @@
 {
-  "posts": [
+  "todos": [
     {
       "id": 1,
-      "title": "json-server",
-      "author": "typicode"
-    }
-  ],
-  "comments": [
+      "title": "react"
+    },
     {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
+      "id": 2,
+      "title": "node"
+    },
+    {
+      "id": 3,
+      "title": "spring"
     }
-  ],
-  "profile": {
-    "name": "typicode"
-  }
+  ]
 }
