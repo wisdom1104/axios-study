@@ -21,6 +21,16 @@ const App = () => {
     setTodos([...todos, todo]);
   };
 
+  //삭제 함수
+  const onClickDeleteButtonHandler = (id) => {
+    axios.delete(`http://localhost:4000/todos/${id}`);
+    setTodos(
+      todos.filter((item) => {
+        return item.id !== id;
+      })
+    );
+  };
+
   // 생성한 함수를 컴포넌트가 mount 됐을 떄 실행하기 위해 useEffect를 사용한다.
   useEffect(() => {
     // effect 구문에 생성한 함수를 넣어 실행한다.
@@ -54,6 +64,12 @@ const App = () => {
         {todos?.map((todo) => (
           <div key={todo.id}>
             {todo.id} : {todo.title}
+            <button
+              type="button"
+              onClick={() => onClickDeleteButtonHandler(todo.id)}
+            >
+              삭제하기
+            </button>
           </div>
         ))}
       </div>
