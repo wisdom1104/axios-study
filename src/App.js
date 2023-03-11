@@ -7,6 +7,9 @@ const App = () => {
     title: "",
   });
 
+  const [targetId, setTargetId] = useState("");
+  const [editTodo, setEditTodo] = useState("");
+
   // axios를 통해서 get 요청을 하는 함수를 생성힌다.
   // 비동기처리를 해야하므로 async/await 구문을 통해서 처리한다.
   // 조회 함수
@@ -18,17 +21,37 @@ const App = () => {
   // 추가 함수
   const onSubmitHandler = async () => {
     axios.post("http://localhost:4000/todos", todo);
-    setTodos([...todos, todo]);
+    // setTodos([...todos, todo]);
+    fetchTodos();
+    setTodo({ ...todo, title: "" });
   };
 
   //삭제 함수
-  const onClickDeleteButtonHandler = (id) => {
+  const onClickDeleteButtonHandler = async (id) => {
     axios.delete(`http://localhost:4000/todos/${id}`);
     setTodos(
       todos.filter((item) => {
         return item.id !== id;
       })
     );
+  };
+
+  //수정 함수
+  const onClickEditButtonHandler = async () => {
+    axios.patch(`http://localhost:4000/todos/${targetId}`, {
+      title: editTodo,
+    });
+    setTodos(
+      todos.map((item) => {
+        if (item.id == targetId) {
+          return { ...item, title: editTodo };
+        } else {
+          return item;
+        }
+      })
+    );
+    setTargetId("");
+    setEditTodo("");
   };
 
   // 생성한 함수를 컴포넌트가 mount 됐을 떄 실행하기 위해 useEffect를 사용한다.
@@ -47,13 +70,38 @@ const App = () => {
           onSubmitHandler(todo);
         }}
       >
+        <div>
+          <input
+            type="text"
+            placeholder="수정하고싶은 Todo ID"
+            value={targetId}
+            onChange={(e) => {
+              setTargetId(e.target.value);
+            }}
+          />
+          <input
+            type="text"
+            placeholder="수정값 입력"
+            value={editTodo}
+            onChange={(e) => {
+              setEditTodo(e.target.value);
+            }}
+          />
+          <button
+            // type='button' 을 추가해야 form의 영향에서 벗어남
+            type="button"
+            onClick={() => onClickEditButtonHandler()}
+          >
+            수정하기
+          </button>
+        </div>
         <input
           type="text"
-          onChange={(ev) => {
-            const { value } = ev.target;
+          value={todo.title}
+          onChange={(e) => {
             setTodo({
               ...todo,
-              title: value,
+              title: e.target.value,
             });
           }}
         />
