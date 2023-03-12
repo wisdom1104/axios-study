@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+// const REACT_APP_SEVER_KEY = "http://localhost:4000";
+import api from "./axios/api";
 
 const App = () => {
   const [todos, setTodos] = useState(null);
@@ -14,13 +16,13 @@ const App = () => {
   // 비동기처리를 해야하므로 async/await 구문을 통해서 처리한다.
   // 조회 함수
   const fetchTodos = async () => {
-    const { data } = await axios.get("http://localhost:4000/todos");
+    const { data } = await api.get("/todos");
     setTodos(data); // 서버로부터 fetching한 데이터를 useState의 state로 set 한다.
   };
 
   // 추가 함수
   const onSubmitHandler = async () => {
-    axios.post("http://localhost:4000/todos", todo);
+    api.post("/todos", todo);
     // setTodos([...todos, todo]);
     fetchTodos();
     setTodo({ ...todo, title: "" });
@@ -28,7 +30,7 @@ const App = () => {
 
   //삭제 함수
   const onClickDeleteButtonHandler = async (id) => {
-    axios.delete(`http://localhost:4000/todos/${id}`);
+    api.delete(`/todos/${id}`);
     setTodos(
       todos.filter((item) => {
         return item.id !== id;
@@ -38,7 +40,7 @@ const App = () => {
 
   //수정 함수
   const onClickEditButtonHandler = async () => {
-    axios.patch(`http://localhost:4000/todos/${targetId}`, {
+    api.patch(`/todos/${targetId}`, {
       title: editTodo,
     });
     setTodos(
